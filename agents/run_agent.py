@@ -4,8 +4,7 @@ import subprocess
 from tempfile import TemporaryDirectory
 
 async def run_tests(code: str, tests: str):
-    # 用临时目录模拟一次完整的代码+测试运行
-    await asyncio.sleep(0.1)
+    # Simulate a complete code and test run using a temporary directory.    await asyncio.sleep(0.1)
     with TemporaryDirectory() as tmpdir:
         target_path = os.path.join(tmpdir, "target.py")
         test_path = os.path.join(tmpdir, "test_target.py")
@@ -16,7 +15,7 @@ async def run_tests(code: str, tests: str):
         with open(test_path, "w", encoding="utf-8") as f:
             f.write(tests)
 
-        # 运行 pytest
+        # run pytest
         try:
             result = subprocess.run(
                 ["pytest", "-q", test_path],

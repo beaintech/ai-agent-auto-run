@@ -1,7 +1,7 @@
 import asyncio
 
 async def generate_tests(code: str) -> str:
-    # 在真实系统中，这里会分析 code 并自动生成测试
+    # In real systems, this will analyze the code and automatically generate tests.
     await asyncio.sleep(0.1)
     tests = '''import pytest
 from target import add
