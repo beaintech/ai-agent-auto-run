@@ -136,4 +136,32 @@ This is an AI-native autonomous software factory — a continuous development pi
 
 ---
 
-# ai-agent-auto-run
+## How to Run Locally
+
+### 1. Create and activate a virtual environment
+
+## How to Run Locally
+
+1. Create and activate a virtual environment
+
+    python3 -m venv venv
+    source venv/bin/activate        # macOS / Linux
+    venv\Scripts\activate           # Windows
+
+2. Install dependencies
+
+    pip install -r requirements.txt
+
+3. Run the orchestrator
+
+    python -m orchestrator.orchestrator
+
+or
+
+    python orchestrator/orchestrator.py
+
+## Notes
+
+- All components are mock implementations.  
+- You can replace the agents with real LLM-driven code generation and repair.  
+- This local design mirrors larger multi-agent orchestration systems used in production environments.
