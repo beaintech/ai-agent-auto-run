@@ -4,7 +4,8 @@ import subprocess
 from tempfile import TemporaryDirectory
 
 async def run_tests(code: str, tests: str):
-    # Simulate a complete code and test run using a temporary directory.    await asyncio.sleep(0.1)
+    # Simulate a complete code and test run using a temporary directory.    
+    await asyncio.sleep(0.1)
     with TemporaryDirectory() as tmpdir:
         target_path = os.path.join(tmpdir, "target.py")
         test_path = os.path.join(tmpdir, "test_target.py")
