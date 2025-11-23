@@ -2,6 +2,6 @@ version: '3.9'
 services:
   orchestrator:
     build: .
-    command: python orchestrator/orchestrator.py
+    command: python main.py
     volumes:
       - .:/app

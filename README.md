@@ -1,22 +1,70 @@
-# Agentic Testing System (Mockup)
+# Agentic FastAPI Testing System (Mock)
 
-This is a simplified demonstration of the “multi-agent parallel code generation + testing” system described by Federico De Ponte.
+This project is a **proof-of-concept** that simulates how a Claude-like
+multi-agent system can automatically:
 
-Features shown:
-1. orchestrator distributes tasks
-2. code_agent generates example code (dummy code here)
-3. test_agent generates pytest tests
-4. run_agent executes tests and returns results
-5. repair_agent attempts fixes when failures occur
+- generate code
+- generate tests
+- run tests
+- repair failing code
+- repeat until all tests pass
 
-Run with:
-    cd agentic-testing-system
-    python orchestrator/orchestrator.py
-    python -m orchestrator.orchestrator
+It uses a very small example: a FastAPI service with a single `/add` endpoint.
 
-Note:
+## Files
+
+- `main.py`  
+  Orchestrator. Runs the loop: code → tests → run → repair.
+
+- `agents/code_agent.py`  
+  Simulated code generator. Returns an initial **buggy** FastAPI app
+  (it ignores the `do_round` flag).
+
+- `agents/test_agent.py`  
+  Simulated test generator. Produces pytest tests using `TestClient`,
+  including cases that require rounding and validation errors.
+
+- `agents/run_agent.py`  
+  Simulated execution agent. Writes `user_code.py` and `test_user_code.py`
+  to a temporary directory and runs `pytest -q`.
+
+- `agents/repair_agent.py`  
+  Simulated repair agent. Takes the failing tests and report,
+  and returns a corrected FastAPI app that passes all tests.
+
+## How the Flow Works
+
+1. `code_agent.generate_code(task)`  
+   Creates an initial FastAPI implementation as a string.
+
+2. `test_agent.generate_tests(task, code)`  
+   Generates pytest tests that describe the expected behaviour.
+
+3. `run_agent.run_tests(code, tests)`  
+   Writes both strings into files and runs `pytest`.
+
+4. If tests fail:  
+   `repair_agent.repair_code(task, code, tests, report)`  
+   returns a new version of the code which should fix the failures.
+
+5. The orchestrator (`main.py`) repeats the run/repair loop
+   until all tests pass or the retry limit is reached.
+
+## Installation
+
+Create a virtual environment (recommended) and install:
+
+```bash
+pip install fastapi pytest httpx
+```
+## run locally
+
+python main.py
+
+## Note:
 - This is a demo project and will not actually connect to Claude / Cursor.
-- You can replace the logic inside agents/* with your own API calls.
+- You can replace the logic inside agents/* with your own API calls, the agents with real LLM-driven code generation and repair.  
+- This local design mirrors larger multi-agent orchestration systems used in production environments.
 
 ---
 
@@ -134,34 +182,32 @@ Observation & Reporting Layer
 
 This is an AI-native autonomous software factory — a continuous development pipeline that writes, tests, fixes, and improves code with minimal human intervention.
 
----
 
-## How to Run Locally
+## Testing Pattern & Effect
+1. Why the first test is supposed to fail
 
-### 1. Create and activate a virtual environment
+The code agent intentionally writes an imperfect FastAPI version on purpose.
+It ignores the do_round=True feature.
+So the rounding test fails.
+This failure shows the system can detect real mistakes, not just run code blindly.
 
-## How to Run Locally
+2. What happens after the failure
 
-1. Create and activate a virtual environment
+When the test fails, the repair agent reads the error report.
+Then it generates a fixed version of the FastAPI endpoint.
+This new version now correctly rounds the result to two decimals.
 
-    python3 -m venv venv
-    source venv/bin/activate        # macOS / Linux
-    venv\Scripts\activate           # Windows
+3. Why the second run passes
 
-2. Install dependencies
+The orchestrator runs the tests again.
+This time, all tests pass because the repaired code is correct.
+This shows the system can self-correct without human help.
 
-    pip install -r requirements.txt
+4. What this proves
 
-3. Run the orchestrator
+This whole cycle demonstrates how an AI agentic system works:
 
-    python -m orchestrator.orchestrator
+Write code → Test it → Detect failure → Repair code → Test again → Success
 
-or
+This is exactly how 14 Claude agents can work together in a real automated coding pipeline.
 
-    python orchestrator/orchestrator.py
-
-## Notes
-
-- All components are mock implementations.  
-- You can replace the agents with real LLM-driven code generation and repair.  
-- This local design mirrors larger multi-agent orchestration systems used in production environments.

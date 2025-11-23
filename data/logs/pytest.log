@@ -1,0 +1,22 @@
+..F.                                                                     [100%]
+=================================== FAILURES ===================================
+___________________________ test_add_with_round_flag ___________________________
+
+    def test_add_with_round_flag():
+        response = client.get("/add", params={"a": 1.111, "b": 2.222, "do_round": True})
+        assert response.status_code == 200
+        # When do_round is True, result should be rounded to 2 decimal places
+        result = response.json()["result"]
+>       assert result == 3.33
+E       assert 3.333 == 3.33
+
+test_user_code.py:35: AssertionError
+=========================== short test summary info ============================
+FAILED test_user_code.py::test_add_with_round_flag - assert 3.333 == 3.33
+1 failed, 3 passed in 0.70s
+
+
+....                                                                     [100%]
+4 passed in 0.68s
+
+
