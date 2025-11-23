@@ -57,7 +57,7 @@ Create a virtual environment (recommended) and install:
 ```bash
 pip install fastapi pytest httpx
 ```
-## run locally
+## Run locally
 
 python main.py
 
@@ -139,7 +139,7 @@ Mockup version = perfect for learning and incremental expansion.
 
 ---
 
-# Agentic Orchestration System — Technical Overview
+# Technical Overview
 
 He built an agentic orchestration system coordinating multiple AI coding agents (Claude Code instances) across a GPU cluster.
 It integrates MLOps, AI Infrastructure Engineering, and Multi-Agent System (MAS) design.
